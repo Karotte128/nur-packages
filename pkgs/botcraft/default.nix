@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace botcraft/cmake/botcraft-config.cmake.in \
-    --replace "find_package(Threads)" \
+    --replace-fail "find_package(Threads)" \
               "include(CMakeFindDependencyMacro)
               find_dependency(Threads)
               find_dependency(protocolCraft CONFIG REQUIRED)"
@@ -67,9 +67,17 @@ stdenv.mkDerivation rec {
             set(VERSION_CLIENT_URL "file://${clientJar}" PARENT_SCOPE)
             set(VERSION_SERVER_URL "" PARENT_SCOPE)
             return()'
+
+    # patch runtime asset path for nix store
+    substituteInPlace cmake/assets.cmake \
+      --replace-fail \
+        'set(ASSET_DIR ./Assets/''${BOTCRAFT_GAME_VERSION})' \
+        'set(ASSET_DIR "''${CMAKE_INSTALL_PREFIX}/bin/Assets/''${BOTCRAFT_GAME_VERSION}")'
   '';
 
   cmakeFlags = [
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
+
     "-DBOTCRAFT_GAME_VERSION=${resolvedVersion}"
 
     "-DBOTCRAFT_BUILD_EXAMPLES=OFF"
