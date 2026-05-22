@@ -54,6 +54,12 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace botcraft/cmake/botcraft-config.cmake.in \
+    --replace "find_package(Threads)" \
+              "include(CMakeFindDependencyMacro)
+              find_dependency(Threads)
+              find_dependency(protocolCraft CONFIG REQUIRED)"
+
     substituteInPlace cmake/mc_urls.cmake \
       --replace-fail \
         'function(get_mc_version_urls game_version)' \
