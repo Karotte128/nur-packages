@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
     owner = "adepierre";
     repo = "Botcraft";
     rev = "402127c4b5aa742be0a063c7d610a44fea900c93";
-    hash = "sha256-aHm9qpFur/WUcWdVHKUbpEqSatvME8p/70euXihMPy4=";
+    hash = "sha256-2XWvCfvttaSFAku6a3iB21NzWfozcytwILPrKxZwUuQ=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
