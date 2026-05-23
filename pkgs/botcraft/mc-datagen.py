@@ -2,6 +2,7 @@ import json
 import hashlib
 import base64
 from urllib.request import urlopen
+from pathlib import Path
 
 def get_client_url(mc_version):
     try:
@@ -96,4 +97,16 @@ def generate_meta(versions):
     return meta
 
 versions = ["1.21.11", "1.21.10", "1.20.1"]
-print(generate_meta(versions))
+
+# Generate the metadata
+mc_meta = generate_meta(versions)
+
+# Directory where the script itself is located
+script_dir = Path(__file__).parent
+
+# File in the same directory as the script
+output_file = script_dir / "minecraft-data.json"
+
+# Write to it
+with open(output_file, "w") as f:
+    json.dump(mc_meta, f, indent=4)
