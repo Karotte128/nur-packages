@@ -66,3 +66,34 @@ def generate_client_hash(client_url):
     sri = "sha256-" + base64.b64encode(digest).decode()
 
     return sri
+
+def build_client_meta_dict(client_version):
+    # Create client meta dict
+    c_meta = {}
+
+    # Get client URL + Hash
+    c_url = get_client_url(client_version)
+    c_hash = generate_client_hash(c_url)
+
+    # Write URL + Hash to client dict
+    c_meta["url"] = c_url
+    c_meta["hash"] = c_hash
+
+    return c_meta
+
+def generate_meta(versions):
+    # Create meta dict
+    meta = {
+        "versions": {}
+    }
+
+    # Iterate over mc versions
+    for version in versions:
+        meta["versions"][version] = {
+            "client": build_client_meta_dict(version)
+        }
+
+    return meta
+
+versions = ["1.21.11", "1.21.10", "1.20.1"]
+print(generate_meta(versions))
