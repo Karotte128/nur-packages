@@ -96,15 +96,23 @@ def generate_meta(versions):
 
     return meta
 
-versions = ["1.21.11", "1.21.10", "1.20.1"]
+# Directory where the script itself is located
+script_dir = Path(__file__).parent
+
+# Input file in the same directory as the script
+input_file = script_dir / "minecraft-versions.txt"
+
+# convert file to list
+with open(input_file, "r") as f:
+    versions = [line.strip() for line in f]
 
 # Generate the metadata
 mc_meta = generate_meta(versions)
 
-# Directory where the script itself is located
-script_dir = Path(__file__).parent
+# Set the latest value
+mc_meta["latest"] = versions[-1]
 
-# File in the same directory as the script
+# Output file in the same directory as the script
 output_file = script_dir / "minecraft-data.json"
 
 # Write to it
